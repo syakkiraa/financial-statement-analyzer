@@ -432,35 +432,8 @@ def render_login() -> None:
             <h2>Sign in</h2>
     """, unsafe_allow_html=True)
 
-    with st.form("login_form", clear_on_submit=False):
-        username = st.text_input("Username", key="login_username", placeholder="")
-        password = st.text_input("Password", key="login_password", type="password", placeholder="")
-        submitted = st.form_submit_button("Login", use_container_width=True)
-
-    if submitted:
-        if check_credentials(username, password):
-            st.session_state.authenticated = True
-            st.session_state.auth_error = ""
-            st.rerun()
-        else:
-            st.session_state.auth_error = "Invalid username or password."
-
-    if st.session_state.auth_error:
-        st.error(st.session_state.auth_error)
-
-    using_default_creds = APP_USERNAME == "admin" and APP_PASSWORD == "xs2admin"
-    note = (
-        "Credentials loaded from Railway environment variables."
-        if not using_default_creds else
-        "Using fallback local credentials. In Railway, set APP_USERNAME and APP_PASSWORD."
-    )
-    st.markdown(f'<div class="auth-note">{note}</div></div></div>', unsafe_allow_html=True)
 
 def require_authentication() -> bool:
-    init_auth_state()
-    if not st.session_state.authenticated:
-        render_login()
-        return False
     return True
 
 # v6.5 required sections (full schema) - Updated to include dscr_analysis
